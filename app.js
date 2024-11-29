@@ -45,7 +45,7 @@ app.get('/books', (req, res) => {
 
 
 app.get('/books/:id', (req, res) => {
-    if (ObjectId.isValid(req.params.id)) {
+    if (ObjectId.isValid(req.params.id)) {  // first check is the id is valid?
         db.collection('books')
             .findOne({ _id: new ObjectId(req.params.id) })
             .then((doc) => {
@@ -67,6 +67,21 @@ app.post('/books', (req, res) => {
             res.status(201).json(result)  // 201: successful creation
         })
         .catch(() => {
-            res.status(500).json({error: "Could not create the document!"})
+            res.status(500).json({ error: "Could not create the document!" })
         })
+})
+
+app.delete('/books/:id', (req, res) => {
+    if (ObjectId.isValid(req.params.id)) {  // first check is the id is valid?
+        db.collection('books')
+            .deleteOne({ _id: new ObjectId(req.params.id) })
+            .then((result) => {
+                res.status(200).json(result);
+            })
+            .catch(() => {
+                res.status(500).json({ error: "Could not delete the document!" })
+            })
+    } else {
+        res.status(500).json({ error: "Could not delete the document!" })
+    }
 })
