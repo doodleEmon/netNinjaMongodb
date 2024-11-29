@@ -43,7 +43,7 @@ app.get('/books', (req, res) => {
         });
 });
 
-
+// get query for specific doc
 app.get('/books/:id', (req, res) => {
     if (ObjectId.isValid(req.params.id)) {  // first check is the id is valid?
         db.collection('books')
@@ -55,10 +55,11 @@ app.get('/books/:id', (req, res) => {
                 res.status(500).json({ error: "Could not fetch the document!" })
             })
     } else {
-        res.status(500).json({ error: "Could not fetch the document!" })
+        res.status(500).json({ error: "Not a valid doc id!" })
     }
 })
 
+// post query
 app.post('/books', (req, res) => {
     const book = req.body
     db.collection('books')
@@ -71,6 +72,7 @@ app.post('/books', (req, res) => {
         })
 })
 
+// delete query
 app.delete('/books/:id', (req, res) => {
     if (ObjectId.isValid(req.params.id)) {  // first check is the id is valid?
         db.collection('books')
@@ -82,6 +84,23 @@ app.delete('/books/:id', (req, res) => {
                 res.status(500).json({ error: "Could not delete the document!" })
             })
     } else {
-        res.status(500).json({ error: "Could not delete the document!" })
+        res.status(500).json({ error: "Not a valid doc id!" })
+    }
+})
+
+// update query
+app.patch('/books/:id', (req, res) => {
+    const updates = req.body;
+    if (ObjectId.isValid(req.params.id)) {  // first check is the id is valid?
+        db.collection('books')
+            .updateOne({ _id: new ObjectId(req.params.id) }, { $set: updates })
+            .then((result) => {
+                res.status(200).json(result);
+            })
+            .catch(() => {
+                res.status(500).json({ error: "Could not update the document!" })
+            })
+    } else {
+        res.status(500).json({ error: "Not a valid doc id!" })
     }
 })
