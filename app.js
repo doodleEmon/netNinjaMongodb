@@ -28,11 +28,15 @@ app.get('/books', (req, res) => {
         return res.status(500).json({ error: "Database not initialized" });
     }
 
-    const books = [];
+    const books = []
+    const page = req.query.page || 0
+    const booksPerPage = 3
 
     db.collection('books')
         .find()
         .sort({ author: 1 })
+        .skip(page * booksPerPage)  // for skipping specific number of documents
+        .limit(booksPerPage)   // limitation of showing documents
         .forEach(book => books.push(book))
         .then(() => {
             res.status(200).json(books);
