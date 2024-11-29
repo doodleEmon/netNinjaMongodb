@@ -2,6 +2,7 @@ const { MongoClient } = require('mongodb');
 
 let dbConnection;
 
+// connect to database
 const connectToDb = (callback) => {
     MongoClient.connect('mongodb://localhost:27017') // Replace with your MongoDB URI
         .then(client => {
@@ -14,6 +15,7 @@ const connectToDb = (callback) => {
         });
 };
 
+// get data from database
 const getDb = () => {
     if (!dbConnection) {
         throw new Error('Database not initialized');

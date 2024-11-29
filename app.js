@@ -1,4 +1,4 @@
-const express = require('express');
+const express = require('express');   // express will return a function
 const { connectToDb, getDb } = require('./db');
 const { ObjectId } = require('mongodb');
 
